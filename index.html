@@ -59,6 +59,7 @@
 </head>
 
 <body>
+    <p id='server-time'></p>
 
   <!-- Youtube Section Starts -->
   <div class="youtubeSection">
@@ -94,6 +95,15 @@
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
   <script>
     
+// From Herkou Webscokets
+      var socket = io();
+      var el = document.getElementById('server-time');
+      socket.on('time', function(timeString) {
+        el.innerHTML = 'Server time: ' + timeString;
+      });
+
+// End of heroku websockets
+
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
