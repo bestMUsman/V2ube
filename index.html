@@ -40,6 +40,10 @@
       list-style-type: none;
       margin: 0;
       padding: 0;
+      width: 60%;
+      margin-bottom: 20px;
+      height: 300px;
+      overflow: scroll;
     }
 
     .chatSection #messages li {
@@ -51,7 +55,19 @@
       background: #eee;
     }
 
+    #roomsOpen li {
+      font-size: 20px;
+      border: 1px solid black;
+      margin: 10px;
+      width: 50%;
+      cursor: pointer;
+    }
+
     #chatContainer {
+      display: none;
+    }
+
+    .youtubeSection {
       display: none;
     }
   </style>
@@ -66,9 +82,16 @@
   </div>
   <!--Room ends-->
 
+  <!-- Display Rooms Start -->
+  <div class="showRoomsContainer">
+    <ul id="roomsOpen"></ul>
+  </div>
+  <!-- Display Rooms Ends -->
+
   <!-- Youtube Section Starts -->
   <div class="youtubeSection">
     <div id="submitUrlContainer">
+      <button onclick="joiningNewRoom('global')">Exit Room</button>
       <form action="">
         <input id="submitUrl" autocomplete="off" /><button>Submit</button>
       </form>
@@ -93,7 +116,6 @@
     </div>
   </div>
   <!-- Chat Ends -->
-
 
 
   <script src="/socket.io/socket.io.js"></script>
@@ -121,31 +143,50 @@
 
     var socket = io();
 
-    // var room = "abc123";
-
     /* Room Starts */
-    // socket.on('connect', function () {
-    //   console.log('I am about to be connected with: ' + room);
 
-    //   // Connected, let's sign-up for to receive messages for this room
-
-    // });
+    // When user comes to website so user joins the room by default
     let room = 'global';
-
     socket.on('connect', function () {
-      // Connected, let's sign-up for to receive messages for this room
       socket.emit('room', room);
     });
 
-    $('#roomContainer form').submit(function () {
-      // debugger;
+    // Counting Rooms
+    let roomsOpen = document.getElementById('roomsOpen');
+    socket.on('rooms count', function (data) {
+      let containgRooms = [];
+      for (var key in data) {
+        if (!data[key].sockets.hasOwnProperty(key)) {
+          console.log(key);
+          if (key !== 'global') {
+            containgRooms.unshift(`<li onclick="joiningNewRoom('${key}');">${key}</li>`);
+          }
+        }
+      }
+      containgRooms = containgRooms.join();
+      roomsOpen.innerHTML = containgRooms;
+    });
 
-      room = $('#setRoom').val();
-      console.log('new room: ' + room);
-      socket.emit('room', room);
+    // When a user creates a new room
+    $('#roomContainer form').submit(function () {
+      joiningNewRoom($('#setRoom').val());
       return false;
     });
 
+    // When a user joins a new room
+    function joiningNewRoom(roomName) {
+      room = roomName;
+      console.log('about to join ' + roomName);
+      socket.emit('room', roomName);
+      if (roomName == 'global') {
+        $('.youtubeSection').hide();
+        $('.showRoomsContainer').show();
+      } else {
+        $('.youtubeSection').show();
+        $('.showRoomsContainer').hide();
+      }
+      $('#messages').empty();
+    }
     /* Room Ends */
 
 
@@ -165,7 +206,10 @@
     });
 
     $('#setNameContainer form').submit(function () {
-      socket.emit('user joined', $('#setNameBox').val());
+      socket.emit('user joined', {
+        name: $('#setNameBox').val(),
+        room: room,
+      });
       $('#setNameBox').val('');
       let setNameBox = document.getElementById('setNameBox');
       setNameBox.style.display = 'none';
@@ -179,7 +223,9 @@
     });
 
     socket.on('user got disconnected', function (data) {
-      $('#messages').append($('<li>').text(data.name + ' has left the chat!'));
+      if (data.name != undefined) {
+        $('#messages').append($('<li>').text(data.name + ' has left the chat!'));
+      }
     });
 
     /* Chat Ends in Script */
