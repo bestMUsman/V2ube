@@ -11,18 +11,6 @@ const server = express()
 
 const io = socketIO(server);
 
-// var app = require("express")();
-// var http = require("http").Server(app);
-// var io = require("socket.io")(http);
-
-// app.get("/", function(req, res) {
-//   res.sendFile(__dirname + "/index.html");
-// });
-
-// http.listen(3000, function() {
-//   console.log("listening on *:3000");
-// });
-
 io.on("connection", function(socket) {
   /* User Connection/Disconnection Starts */
   console.log("a user connected");
@@ -56,22 +44,18 @@ io.on("connection", function(socket) {
   socket.on("chat message", function(data) {
     console.log("this is the current room for this user=> " + data.room);
     console.log(data.msg);
-
     io.sockets.in(data.room).emit("new message", {
       msg: data.msg,
       name: socket.username,
     });
-
     // io.emit("new message", {
     //   msg: data.msg,
     //   name: socket.username,
     // });
   });
-
   /* Chat Ends in Server */
 
   /* Youtube Section Starts in Server */
-
   socket.on("sending url to server", function(data) {
     io.sockets.in(data.room).emit("sending url to everyone", {
       url: data.url,
@@ -95,9 +79,3 @@ io.on("connection", function(socket) {
   });
   /* Youtube Ends in Server */
 });
-
-// var nsp = io.of("/abc");
-// nsp.on("connection", function(socket) {
-//   console.log("someone connected");
-// });
-// nsp.emit("hi", "everyone!");
