@@ -6,7 +6,11 @@ const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, "index.html");
 
 const server = express()
-  .use((req, res) => res.sendFile(INDEX))
+  // .use((req, res) => res.sendFile(INDEX))
+  .use(express.static(path.join(__dirname, "public")))
+  .get("/", function(req, res) {
+    res.sendFile(INDEX);
+  })
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 const io = socketIO(server);
@@ -17,14 +21,14 @@ io.on("connection", function(socket) {
   socket.on("disconnect", function() {
     console.log("a user disconnected");
     io.emit("user got disconnected", {
-      name: socket.username,
+      name: socket.username
     });
   });
 
   socket.on("user joined", function(data) {
     socket.username = data.name;
     io.sockets.in(data.room).emit("got new user", {
-      name: socket.username,
+      name: socket.username
     });
   });
   /* User Ends */
@@ -46,7 +50,7 @@ io.on("connection", function(socket) {
     console.log(data.msg);
     io.sockets.in(data.room).emit("new message", {
       msg: data.msg,
-      name: socket.username,
+      name: socket.username
     });
     // io.emit("new message", {
     //   msg: data.msg,
@@ -58,7 +62,7 @@ io.on("connection", function(socket) {
   /* Youtube Section Starts in Server */
   socket.on("sending url to server", function(data) {
     io.sockets.in(data.room).emit("sending url to everyone", {
-      url: data.url,
+      url: data.url
     });
   });
 
@@ -74,7 +78,7 @@ io.on("connection", function(socket) {
     console.log(`the following: room=>${data.room} time=>${data.time}`);
 
     io.sockets.in(data.room).emit("send this time to everyone", {
-      time: data.time,
+      time: data.time
     });
   });
   /* Youtube Ends in Server */

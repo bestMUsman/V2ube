@@ -2,189 +2,49 @@
 <html>
 
 <head>
-  <title>Socket.IO chat</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font: 13px Helvetica, Arial;
-    }
-
-    .chatSection #messages li:nth-child(odd) {
-      background: #eee;
-    }
-
-
-
-    #chatContainer {
-      display: none;
-    }
-
-    .youtubeSection {
-      display: none;
-    }
-    /* Show Rooms Css Starts */
-
-    .showRoomsContainer {
-      background: #fcfcfc;
-      display: block;
-      width: 749px;
-      margin: auto;
-      height: 417px;
-      border-radius: 20px 20px 0px 0px;
-      -moz-border-radius: 20px 20px 0px 0px;
-      -webkit-border-radius: 20px 20px 0px 0px;
-    }
-
-    .showRoomsContainer li {
-      font-size: 22px;
-      border: 1px outset;
-      border-left: 0px;
-      border-right: 0px;
-      padding: 15px;
-      padding-left: 17px;
-      padding-right: 0px;
-      cursor: pointer;
-      list-style-type: none;
-    }
-
-    .showRoomsContainer li:hover {
-      -webkit-box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.75);
-      -moz-box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.75);
-      box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.75);
-    }
-
-    div.showRoomsContainer {
-      border: 1px outset;
-      -webkit-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.75);
-      -moz-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.75);
-      box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.75);
-    }
-
-    .showRoomsContainer h1 {
-      text-align: center;
-      padding: 15px;
-      background: linear-gradient(to bottom, #eeeeee 0%, #d3d3d3 49%, #eeeeee 100%);
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee', GradientType=0);
-      border-radius: 20px 20px 0px 0px;
-      -moz-border-radius: 20px 20px 0px 0px;
-      -webkit-border-radius: 20px 20px 0px 0px;
-      border: 0px solid #000000;
-      border-bottom: 1px solid;
-    }
-
-    #roomsOpen {
-      overflow: auto;
-      overflow-x: hidden;
-      height: 355px;
-    }
-
-    #roomOpen {
-      display: none;
-    }
-    /* Show Rooms Css Ends */
-
-/* Video Container Css Starts */
-  .videoContainer {
-    background: #fcfcfc;
-    display: block;
-    width: 749px;
-    margin: auto;
-    height: 417px;
-    border-radius: 20px 20px 0px 0px;
-    -moz-border-radius: 20px 20px 0px 0px;
-    -webkit-border-radius: 20px 20px 0px 0px;
-}
-
-.videoContainer h1 {
-    text-align: center;
-    padding: 15px;
-    background: linear-gradient(to bottom, #eeeeee 0%, #d3d3d3 49%, #eeeeee 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee', GradientType=0);
-    border-radius: 20px 20px 0px 0px;
-    -moz-border-radius: 20px 20px 0px 0px;
-    -webkit-border-radius: 20px 20px 0px 0px;
-    border: 0px solid #000000;
-    border-bottom: 1px solid;
-}
-
-
-
-/* Video Container Css Ends */
-
-
-.chatSection form {
-    border: 3px inset;
-    padding: 3px;
-    border-bottom: 1px solid black;
-    bottom: 0;
-    width: 750px;
-    margin: auto
-    
-;
-    position: absolute;
-}
-
-.chatSection form input {
-    border: 0;
-    padding: 10px;
-    width: 90%;
-    margin-right: .5%;
-}
-
-.chatSection form button {
-    width: 9%;
-    background: rgb(130, 224, 255);
-    border: none;
-    padding: 10px;
-}
-
-.chatSection #messages {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    width: 60%;
-    margin-bottom: 20px;
-    height: 300px;
-    overflow: scroll;
-}
-
-.chatSection #messages li {
-    padding: 5px 10px;
-    font-size: 25px;
-}
-
-.chatSection {
-    margin: auto:
-    text-align:center;
-    display: block;
-    text-align: center;
-}
-
-
-  </style>
+  <title>V2ube</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
 <body>
   <div class="whole">
     <!--Room start-->
-    <div id="roomContainer">
-      <form action="">
+    <!--<form action="">
         <input id="setRoom" autocomplete="off" /><button>Create and Join Room</button>
-      </form>
-    </div>
+      </form>-->
     <!--Room ends-->
 
     <!-- Show Rooms Start -->
     <div class="showRoomsContainer">
       <h1>Rooms</h1>
-      <ul id="roomsOpen"></ul>
+      <ul id="roomsOpen">
+      </ul>
+      <div class='addRoomBttn'>+</div>
     </div>
     <!-- Show Rooms Ends -->
+
+    <!-- Adding Room Module Starts -->
+    <div class="addingRoomContainer">
+      <div class="addingRoomInnerContainer">
+        <div class="header">Create A Room</div>
+        <div class="addingRoom" id="roomContainer">
+          <div class="moduleContainer">
+            <form action="">
+              <div class="roomName">
+                <label><b>Room Name</b></label>
+                <input id="name" autocomplete="off" placeholder="My Room" required />
+              </div>
+              <div class="videoUrl">
+                <label><b>Video Url</b></label>
+                <input id="url" autocomplete="off" placeholder="Example: https://www.youtube.com/watch?v=ra9ySAkuzZI" required />
+              </div>
+              <button>Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Adding Room Module Ends -->
 
     <!-- Youtube Section Starts -->
     <div class="youtubeSection">
@@ -203,16 +63,19 @@
 
     <!-- Chat Section Starts -->
     <div class="chatSection">
+      <h1>Chat</h1>
       <div id="setNameContainer">
-        <form action="">
-          <input id="setNameBox" autocomplete="off" /><button>Enter</button>
+        <form action="" id="setNameForm">
+          <label class="yourName">What's Your Name</label>
+          <input id="setNameBox" autocomplete="off" required autofocus />
+          <!--<button>Enter</button>-->
         </form>
       </div>
 
       <div id="chatContainer">
         <ul id="messages"></ul>
-        <form action="">
-          <input id="m" autocomplete="off" /><button>Send</button>
+        <form action="" id="messageForm">
+          <input id="m" autocomplete="off" required /><button>Send</button>
         </form>
       </div>
     </div>
@@ -220,216 +83,7 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script>
-      var tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-      var player;
-      function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-          height: '390',
-          width: '749',
-          // playerVars: { 'autoplay': 0, },
-          playerVars: { rel: 0 },
-          videoId: '',
-          events: {
-            // 'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-          }
-        });
-      }
-
-      var socket = io();
-
-      /* Room Starts */
-
-      // When user comes to website so user joins the room by default
-      let room = 'global';
-      socket.on('connect', function () {
-        socket.emit('room', room);
-      });
-
-      // Counting Rooms
-      let roomsOpen = document.getElementById('roomsOpen');
-      socket.on('rooms count', function (data) {
-        let containgRooms = '';
-        for (var key in data) {
-          if (!data[key].sockets.hasOwnProperty(key)) {
-            console.log(key);
-            if (key !== 'global') {
-              containgRooms += `<li onclick="joiningNewRoom('${key}');">${key}</li>`;
-            }
-          }
-        }
-        roomsOpen.innerHTML = containgRooms;
-        $('.showRoomsContainer ul').html($('ul').find('li').get().reverse());
-      });
-
-      // When a user creates a new room
-      $('#roomContainer form').submit(function () {
-        joiningNewRoom($('#setRoom').val());
-        return false;
-      });
-
-      // When a user joins a new room
-      function joiningNewRoom(roomName) {
-        room = roomName;
-        console.log('about to join ' + roomName);
-        
-        if (roomName == 'global') {
-          $('.youtubeSection').hide();
-          $('.showRoomsContainer').show();
-        } else {
-          $('.youtubeSection').show();
-          $('.showRoomsContainer').hide();
-          let messages = document.getElementById('messages');
-          // messages.innerHTML = '';
-        }
-        
-        socket.emit('room', roomName);
-      }
-      /* Room Ends */
-
-      /* Chat Section Starts in Script */
-      $('#chatContainer form').submit(function () {
-        let chatMessage = $('#m').val();
-        socket.emit('chat message', {
-          msg: chatMessage,
-          room: room,
-        });
-        $('#m').val('');
-        return false;
-      });
-
-      socket.on('new message', function (data) {
-        $('#messages').append($('<li>').text(data.name + ': ' + data.msg));
-      });
-
-      $('#setNameContainer form').submit(function () {
-        socket.emit('user joined', {
-          name: $('#setNameBox').val(),
-          room: room,
-        });
-        $('#setNameBox').val('');
-        let setNameBox = document.getElementById('setNameBox');
-        setNameBox.style.display = 'none';
-        let chatContainer = document.getElementById('chatContainer');
-        chatContainer.style.display = 'block';
-        return false;
-      });
-
-      socket.on('got new user', function (data) {
-        $('#messages').append($('<li>').text(data.name + ' has joined the chat!'));
-      });
-
-      socket.on('user got disconnected', function (data) {
-        if (data.name != undefined) {
-          $('#messages').append($('<li>').text(data.name + ' has left the chat!'));
-        }
-      });
-      /* Chat Ends in Script */
-
-      /* Youtube Section Starts in Script  */
-
-      // This sends the url to server when a user submit the form
-      $('#submitUrlContainer form').submit(function () {
-        console.log('the whole url => ', $('#submitUrl').val());
-        let url = $('#submitUrl').val().split('https://www.youtube.com/watch?v=').pop().trim();
-        socket.emit('sending url to server', {
-          url: url,
-          room: room,
-        });
-        $('#submitUrl').val('');
-        return false;
-      });
-
-      var firsTimeLoaded = true;
-      let oldOldState = '';
-      let oldState = '';
-
-      socket.on("sending url to everyone", function (data) {
-        console.log('url id=>', data.url);
-        player.loadVideoById(data.url)
-      });
-
-      socket.on('playing video for everyone', function () {
-        player.playVideo();
-      });
-
-      socket.on('pausing video for everyone', function () {
-        player.pauseVideo();
-      });
-
-      socket.on('send this time to everyone', function (time) {
-        if (time.time != undefined) {
-          console.log('PRINT THE CURRENT TIME ONLY WHEN IT IS NOT UNDEFINED ', time.time);
-          player.seekTo(time.time, true)
-          player.playVideo();
-        }
-      });
-
-      // function onPlayerReady(event) {
-      //   console.log('this is workin inside onplayerready');
-      // }
-
-      function onPlayerStateChange(event) {
-        console.log('State Change => ', event.data);
-        if (firsTimeLoaded == false) {
-
-          // To change the time, when the video is paused and the the time is being changed so the other method doesn't work -- Pause and Play Method
-          if ((oldState == 2 && event.data == 1) ||
-            (oldOldState == 2 && event.data == 1)) {
-            console.log('sending time using pause and play method');
-            let currentTime = player.getCurrentTime();
-            if (currentTime != undefined) {
-              socket.emit("new time send to server", {
-                time: currentTime,
-                room: room,
-              });
-            }
-          }
-          // To change the video time for everyone -- using buffer method
-          // else if (event.data == 3 && firsTimeLoaded == false) {
-          //   console.log('now it is time to get new time');
-          //   let currentTime = player.getCurrentTime();
-          //   if (currentTime != undefined) {
-          //     socket.emit("new time send to server", {
-          //       time: currentTime,
-          //       room: room,
-          //     });
-          //   }
-          // }
-
-          // To play the video for everyone
-          else if (event.data == 1) {
-            socket.emit("play video now to server", room);
-          }
-
-          // To pause the video for everyone
-          if (event.data == 2) {
-            socket.emit("pause video now to server", room);
-          }
-        }
-
-        // To Stop Video In the Beggining
-        if (event.data == 1 && firsTimeLoaded == true) {
-          console.log('firsTimeLoaded ', firsTimeLoaded);
-          player.stopVideo();
-          firsTimeLoaded = false;
-          console.log('firsTimeLoaded ', firsTimeLoaded);
-          console.log('=====================');
-        }
-
-        // if (event.data == YT.PlayerState.PLAYING && !done) {
-        //   setTimeout(stopVideo, 6000);
-        //   done = true;
-        // }
-        oldOldState = oldState;
-        oldState = event.data;
-      }
-    </script>
+    <script src="script.js"></script>
 
 </body>
 
