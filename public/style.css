@@ -11,6 +11,10 @@ body {
 }
 
 
+.whole {
+    margin-top: 2vh;
+}
+
 
 /*#chatContainer {
   display: none;
