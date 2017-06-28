@@ -39,18 +39,28 @@ socket.on("rooms count", function(data) {
     if (!data[key].sockets.hasOwnProperty(key)) {
       // console.log(key);
       if (key !== "global") {
-        containgRooms += `<li onclick="joiningNewRoom('${key}');">${key}</li>`;
+        containgRooms += `<li onclick="joiningNewRoom('${key}');">${key}</li>'`;
       }
     }
   }
   roomsOpen.innerHTML = containgRooms;
   $(".showRoomsContainer ul").html($("ul").find("li").get().reverse());
+  $(".showRoomsContainer").append(
+    '<div class="addRoomBttn"  onclick="showAddRoomModule()">+</div>'
+  );
 });
 
-// When a user creates a new room
-$("#roomContainer form").submit(function() {
-  joiningNewRoom($("#roomContainer #name").val());
-  $(".addingRoomContainer").hide();
+// When a user submits 'creates new room' form
+$(".addingRoomContainer form").submit(function() {
+  joiningNewRoom($(".addingRoomContainer #name").val());
+  loadVideoByUrl("addingRoomContainer");
+  $(".addingRoomContainer #name").val("");
+  return false;
+});
+
+// When a user changes the video Url
+$(".changeVideoUrlContainer form").submit(function() {
+  loadVideoByUrl("changeVideoUrlContainer");
   return false;
 });
 
@@ -58,42 +68,60 @@ $("#roomContainer form").submit(function() {
 function joiningNewRoom(roomName) {
   room = roomName;
   // console.log("about to join " + roomName);
-
   if (roomName == "global") {
     $(".youtubeSection").hide();
     $(".showRoomsContainer").show();
   } else {
     $(".youtubeSection").show();
     $(".showRoomsContainer").hide();
-    let messages = document.getElementById("messages");
+    // let messages = document.getElementById("messages");
     // messages.innerHTML = '';
   }
-
   socket.emit("room", roomName);
 }
 /* Room Ends */
 
 /* Adding Room Module Starts */
-let showingModule = false;
-
-$(".addRoomBttn").click(function() {
-  $(".addingRoomContainer").show();
+// let showingModule = false;
+function showAddRoomModule() {
+  $(".addingRoomContainer").css("display", "flex");
   $(".addingRoomInnerContainer").show().addClass("animatezoom");
-  showingModule = true;
-});
+  // showingModule = true;
+}
 // $(".addingRoomContainer").show().addClass("animatezoom");
 
-$("body").click(function(event) {
+$(".addingRoomContainer").click(function(event) {
   // console.log(event.target);
   if ($(event.target).is(":not(.addingRoomContainer *, .addRoomBttn)")) {
     // console.log("working");
-    if (showingModule) {
-      $(".addingRoomContainer").hide();
-    }
+    // if (showingModule) {
+    $(".addingRoomContainer").hide();
+    // }
   }
 });
 
 /* Adding Room Module Ends */
+
+/* Changing Video Url Module Starts */
+// let showingVideoUrlModule = false;
+function showChangeVideoUrlModule() {
+  $(".changeVideoUrlContainer").css("display", "flex");
+  $(".changeVideoUrlInnerContainer").show().addClass("animatezoom");
+  // showingVideoUrlModule = true;
+}
+
+$(".changeVideoUrlContainer").click(function(event) {
+  // console.log('working haha');
+  if (
+    $(event.target).is(":not(.changeVideoUrlContainer *, .switchUrlArrows)")
+  ) {
+    // console.log("ANOTHER working");
+    // if (showingVideoUrlModule) {
+    $(".changeVideoUrlContainer").hide();
+    // }
+  }
+});
+/* Changing Video Url Module Ends */
 
 /* Chat Section Starts in Script */
 $("#chatContainer form").submit(function() {
@@ -160,14 +188,16 @@ socket.on("user got disconnected", function(data) {
     });
   }
 });
-/* Chat Ends in Script */
+/* Chat Section Ends in Script */
 
 /* Youtube Section Starts in Script  */
-
 // This sends the url to server when a user submit the form
-$(".addingRoomContainer form").submit(function() {
-  console.log("the whole url => ", $("#submitUrl").val());
-  let url = $("#url")
+
+function loadVideoByUrl(containerName) {
+  $(`.${containerName}`).hide();
+
+  // console.log("the whole url => ", $("#submitUrl").val());
+  let url = $(`.${containerName} #url`)
     .val()
     .split("https://www.youtube.com/watch?v=")
     .pop()
@@ -176,10 +206,9 @@ $(".addingRoomContainer form").submit(function() {
     url: url,
     room: room
   });
-  $(".addingRoomContainer #name").val("");
-  $(".addingRoomContainer #url").val("");
+  $(`.${containerName} #url`).val("");
   return false;
-});
+}
 
 var firsTimeLoaded = true;
 let oldOldState = "";

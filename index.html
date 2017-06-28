@@ -19,7 +19,6 @@
       <h1>Rooms</h1>
       <ul id="roomsOpen">
       </ul>
-      <div class='addRoomBttn'>+</div>
     </div>
     <!-- Show Rooms Ends -->
 
@@ -46,16 +45,36 @@
     </div>
     <!-- Adding Room Module Ends -->
 
+    <!-- Change Video Url Module Starts -->
+    <div class="changeVideoUrlContainer">
+      <div class="changeVideoUrlInnerContainer">
+        <div class="header">Change Video Url</div>
+        <div class="changeVideoUrl" id="roomContainer">
+          <div class="moduleContainer">
+            <form action="">
+              <div class="videoUrl">
+                <label><b>Video Url</b></label>
+                <input id="url" autocomplete="off" placeholder="Example: https://www.youtube.com/watch?v=ra9ySAkuzZI" required />
+              </div>
+              <button>Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Change Video Url Module Ends -->
+
     <!-- Youtube Section Starts -->
     <div class="youtubeSection">
-      <div id="submitUrlContainer">
-        <button onclick="joiningNewRoom('global')">Exit Room</button>
-        <form action="">
-          <input id="submitUrl" autocomplete="off" /><button>Submit</button>
-        </form>
-      </div>
       <div class="videoContainer">
-        <h1>Video</h1>
+        <h1>
+          <div class="switchUrlArrows" onclick="showChangeVideoUrlModule()">
+            <div class="leftArrow">&#8592;</div>
+            <div class="rightArrow">&#8594;</div>
+          </div>
+          Video
+          <button onclick="joiningNewRoom('global')" class="exitRoomBttn">X</button>
+        </h1>
         <div id="player"></div>
       </div>
     </div>
