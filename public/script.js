@@ -24,13 +24,7 @@ function onYouTubeIframeAPIReady() {
 var socket = io();
 
 /* Room Starts */
-
 // When user comes to website so user joins the room by default
-// let room = "global";
-
-/* Check URL Starts */
-
-/* Check URL Ends */
 let room = "global";
 socket.on("connect", function() {
   getUrl();
@@ -49,11 +43,7 @@ function getUrl() {
 }
 
 window.onpopstate = function(event) {
-  console.log(event);
-  
-  // debugger;
   getUrl();
-  // alert('workgin')
 };
 
 // Counting Rooms
@@ -63,7 +53,6 @@ socket.on("rooms count", function(data) {
   let containgRoomsAsString = "";
   for (var key in data) {
     if (!data[key].sockets.hasOwnProperty(key)) {
-      // console.log(key);
       if (key !== "global") {
         containgRooms.unshift(
           `<li onclick="joiningNewRoom('${key}');">${key}</li>`
@@ -97,7 +86,6 @@ $(".changeVideoUrlContainer form").submit(function() {
 // When a user joins a new room
 function joiningNewRoom(roomName) {
   room = roomName;
-  // console.log("about to join " + roomName);
   if (roomName == "global") {
     $(".youtubeSection").hide();
     $(".showRoomsContainer").show();
@@ -106,8 +94,6 @@ function joiningNewRoom(roomName) {
     $(".youtubeSection").show();
     $(".showRoomsContainer").hide();
     history.pushState(null, null, "/Roomname=" + room);
-    // window.location.pathname = "/Roomname=" + room;
-    // let messages = document.getElementById("messages");
   }
   messages.innerHTML = "";
   socket.emit("room", roomName);
@@ -115,43 +101,30 @@ function joiningNewRoom(roomName) {
 /* Room Ends */
 
 /* Adding Room Module Starts */
-// let showingModule = false;
 function showAddRoomModule() {
   $(".addingRoomContainer").css("display", "flex");
   $(".addingRoomInnerContainer").show().addClass("animatezoom");
-  // showingModule = true;
 }
-// $(".addingRoomContainer").show().addClass("animatezoom");
 
 $(".addingRoomContainer").click(function(event) {
-  // console.log(event.target);
   if ($(event.target).is(":not(.addingRoomContainer *, .addRoomBttn)")) {
-    // console.log("working");
-    // if (showingModule) {
     $(".addingRoomContainer").hide();
-    // }
   }
 });
 
 /* Adding Room Module Ends */
 
 /* Changing Video Url Module Starts */
-// let showingVideoUrlModule = false;
 function showChangeVideoUrlModule() {
   $(".changeVideoUrlContainer").css("display", "flex");
   $(".changeVideoUrlInnerContainer").show().addClass("animatezoom");
-  // showingVideoUrlModule = true;
 }
 
 $(".changeVideoUrlContainer").click(function(event) {
-  // console.log('working haha');
   if (
     $(event.target).is(":not(.changeVideoUrlContainer *, .switchUrlArrows)")
   ) {
-    // console.log("ANOTHER working");
-    // if (showingVideoUrlModule) {
     $(".changeVideoUrlContainer").hide();
-    // }
   }
 });
 /* Changing Video Url Module Ends */
@@ -188,7 +161,6 @@ $("#setNameContainer form").submit(function() {
   });
   $("#setNameBox").val("");
   $("#setNameContainer").hide();
-  // $("#chatContainer").show();
   return false;
 });
 
@@ -225,11 +197,8 @@ socket.on("user got disconnected", function(data) {
 
 /* Youtube Section Starts in Script  */
 // This sends the url to server when a user submit the form
-
 function loadVideoByUrl(containerName) {
   $(`.${containerName}`).hide();
-
-  // console.log("the whole url => ", $("#submitUrl").val());
   let url = $(`.${containerName} #url`)
     .val()
     .split("https://www.youtube.com/watch?v=")
@@ -248,7 +217,6 @@ let oldOldState = "";
 let oldState = "";
 
 socket.on("sending url to everyone", function(data) {
-  // console.log("url id=>", data.url);
   player.loadVideoById(data.url);
 });
 
@@ -262,10 +230,6 @@ socket.on("pausing video for everyone", function() {
 
 socket.on("send this time to everyone", function(time) {
   if (time.time != undefined) {
-    // console.log(
-    //   "PRINT THE CURRENT TIME ONLY WHEN IT IS NOT UNDEFINED ",
-    //   time.time
-    // );
     player.seekTo(time.time, true);
     player.playVideo();
   }
@@ -316,11 +280,8 @@ function onPlayerStateChange(event) {
 
   // To Stop Video In the Beggining
   if (event.data == 1 && firsTimeLoaded == true) {
-    // console.log("firsTimeLoaded ", firsTimeLoaded);
     player.stopVideo();
     firsTimeLoaded = false;
-    // console.log("firsTimeLoaded ", firsTimeLoaded);
-    // console.log("=====================");
   }
 
   // if (event.data == YT.PlayerState.PLAYING && !done) {

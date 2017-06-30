@@ -25,7 +25,7 @@ body {
 /* Show Rooms Css Starts */
 
 .showRoomsContainer {
-  background: url('http://findabout.me/card-game/images/area.jpg');
+  background: url('images/area.jpg');
   box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.15);
   display: block;
   width: 749px;
@@ -172,7 +172,7 @@ body {
 /* Adding Room Module Ends */
 
 body {
-  background: url('http://findabout.me/card-game/images/back.jpg');
+  background: url('images/back.jpg');
 }
 
 .showRoomsContainer h1 {
@@ -216,11 +216,10 @@ body {
 }
 
 /* Chat Section Starts */
-
 .chatSection {
   margin: auto;
   display: block;
-  background: url(http://findabout.me/card-game/images/area.jpg);
+  background: url(images/area.jpg);
   box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.15);
   width: 749px;
   height: 310px;
@@ -286,11 +285,13 @@ body {
 }
 
 .chatSection ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
 .chatSection ::-webkit-scrollbar-thumb {
   border-radius: 5px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -403,7 +404,6 @@ body {
   height: 18px;
   font-size: 40px;
 }
-
 /* Change Video Url Button Ends */
 
 /* Change Video Url Module Starts */
@@ -482,7 +482,6 @@ body {
   width: 319px;
   margin: auto;
 }
-
 /* Change Video Url Module Ends */
 
 .exitRoomBttn {

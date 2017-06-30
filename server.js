@@ -5,11 +5,10 @@ const path = require("path");
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, "index.html");
 
-var cb1 = function (req, res, next) {
-  res.send('hello', INDEX);
-  next()
-}
-
+var cb1 = function(req, res, next) {
+  res.send("hello", INDEX);
+  next();
+};
 
 const server = express()
   // .use((req, res) => res.sendFile(INDEX))
@@ -29,9 +28,8 @@ io.on("connection", function(socket) {
   console.log("a user connected");
   socket.on("disconnect", function() {
     console.log("a user disconnected");
-    
- io.sockets.in(socket.userRoom).emit("user got disconnected", {
-      
+
+    io.sockets.in(socket.userRoom).emit("user got disconnected", {
       name: socket.username,
     });
   });
@@ -58,16 +56,19 @@ io.on("connection", function(socket) {
 
   /* Chat Section Starts in Server */
   socket.on("chat message", function(data) {
-    console.log("Room: " + socket.userRoom + ", Msg: " + data.msg + ", User: " + socket.username);
+    console.log(
+      "Room: " +
+        socket.userRoom +
+        ", Msg: " +
+        data.msg +
+        ", User: " +
+        socket.username
+    );
     console.log(data.msg);
     io.sockets.in(socket.userRoom).emit("new message", {
       msg: data.msg,
       name: socket.username,
     });
-    // io.emit("new message", {
-    //   msg: data.msg,
-    //   name: socket.username,
-    // });
   });
   /* Chat Ends in Server */
 
