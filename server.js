@@ -5,10 +5,19 @@ const path = require("path");
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, "index.html");
 
+var cb1 = function (req, res, next) {
+  res.send('hello', INDEX);
+  next()
+}
+
+
 const server = express()
   // .use((req, res) => res.sendFile(INDEX))
   .use(express.static(path.join(__dirname, "public")))
   .get("/", function(req, res) {
+    res.sendFile(INDEX);
+  })
+  .get("/Roomname=:id", function(req, res) {
     res.sendFile(INDEX);
   })
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
@@ -20,21 +29,24 @@ io.on("connection", function(socket) {
   console.log("a user connected");
   socket.on("disconnect", function() {
     console.log("a user disconnected");
-    io.emit("user got disconnected", {
-      name: socket.username
+    
+ io.sockets.in(socket.userRoom).emit("user got disconnected", {
+      
+      name: socket.username,
     });
   });
 
   socket.on("user joined", function(data) {
     socket.username = data.name;
-    io.sockets.in(data.room).emit("got new user", {
-      name: socket.username
+    io.sockets.in(socket.userRoom).emit("got new user", {
+      name: socket.username,
     });
   });
   /* User Ends */
 
   /* Room Starts */
   socket.on("room", function(room) {
+    socket.userRoom = room; // Setting up new room for the session of user
     if (Object.keys(io.sockets.adapter.sids[socket.id]).length >= 2) {
       socket.leave(socket.rooms[Object.keys(socket.rooms)[1]]);
     }
@@ -46,11 +58,11 @@ io.on("connection", function(socket) {
 
   /* Chat Section Starts in Server */
   socket.on("chat message", function(data) {
-    console.log("this is the current room for this user=> " + data.room);
+    console.log("Room: " + socket.userRoom + ", Msg: " + data.msg + ", User: " + socket.username);
     console.log(data.msg);
-    io.sockets.in(data.room).emit("new message", {
+    io.sockets.in(socket.userRoom).emit("new message", {
       msg: data.msg,
-      name: socket.username
+      name: socket.username,
     });
     // io.emit("new message", {
     //   msg: data.msg,
@@ -61,8 +73,8 @@ io.on("connection", function(socket) {
 
   /* Youtube Section Starts in Server */
   socket.on("sending url to server", function(data) {
-    io.sockets.in(data.room).emit("sending url to everyone", {
-      url: data.url
+    io.sockets.in(socket.userRoom).emit("sending url to everyone", {
+      url: data.url,
     });
   });
 
@@ -75,10 +87,10 @@ io.on("connection", function(socket) {
   });
 
   socket.on("new time send to server", function(data) {
-    console.log(`the following: room=>${data.room} time=>${data.time}`);
+    console.log(`the following: room=>${socket.userRoom} time=>${data.time}`);
 
-    io.sockets.in(data.room).emit("send this time to everyone", {
-      time: data.time
+    io.sockets.in(socket.userRoom).emit("send this time to everyone", {
+      time: data.time,
     });
   });
   /* Youtube Ends in Server */

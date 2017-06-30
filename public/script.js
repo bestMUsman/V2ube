@@ -26,25 +26,55 @@ var socket = io();
 /* Room Starts */
 
 // When user comes to website so user joins the room by default
+// let room = "global";
+
+/* Check URL Starts */
+
+/* Check URL Ends */
 let room = "global";
 socket.on("connect", function() {
-  socket.emit("room", room);
+  getUrl();
 });
+
+function getUrl() {
+  let url = window.location.pathname;
+  url = url.split("/Roomname=").pop().trim();
+
+  if (url !== "/") {
+    room = url;
+  } else {
+    room = "global";
+  }
+  joiningNewRoom(room);
+}
+
+window.onpopstate = function(event) {
+  console.log(event);
+  
+  // debugger;
+  getUrl();
+  // alert('workgin')
+};
 
 // Counting Rooms
 let roomsOpen = document.getElementById("roomsOpen");
 socket.on("rooms count", function(data) {
-  let containgRooms = "";
+  let containgRooms = [];
+  let containgRoomsAsString = "";
   for (var key in data) {
     if (!data[key].sockets.hasOwnProperty(key)) {
       // console.log(key);
       if (key !== "global") {
-        containgRooms += `<li onclick="joiningNewRoom('${key}');">${key}</li>`;
+        containgRooms.unshift(
+          `<li onclick="joiningNewRoom('${key}');">${key}</li>`
+        );
       }
     }
   }
-  roomsOpen.innerHTML = containgRooms;
-  $(".showRoomsContainer ul").find("li").get().reverse();
+  containgRooms.forEach(function(element) {
+    containgRoomsAsString += element;
+  });
+  roomsOpen.innerHTML = containgRoomsAsString;
   $(".showRoomsContainer").append(
     '<div class="addRoomBttn"  onclick="showAddRoomModule()">+</div>'
   );
@@ -71,12 +101,15 @@ function joiningNewRoom(roomName) {
   if (roomName == "global") {
     $(".youtubeSection").hide();
     $(".showRoomsContainer").show();
+    history.pushState(null, null, "/");
   } else {
     $(".youtubeSection").show();
     $(".showRoomsContainer").hide();
+    history.pushState(null, null, "/Roomname=" + room);
+    // window.location.pathname = "/Roomname=" + room;
     // let messages = document.getElementById("messages");
-    // messages.innerHTML = '';
   }
+  messages.innerHTML = "";
   socket.emit("room", roomName);
 }
 /* Room Ends */
