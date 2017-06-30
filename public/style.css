@@ -102,7 +102,8 @@ body {
   background-color: #ee5f3c;
 }
 
-.moduleContainer #name, .moduleContainer #url {
+.moduleContainer #name,
+.moduleContainer #url {
   display: block;
   padding: .375rem .75rem;
 }
@@ -154,7 +155,7 @@ body {
 }
 
 .addingRoomInnerContainer .header {
-  background: #2196F3;
+  background: #2196f3;
   color: #fff;
   padding: 26.8px;
   border-top-left-radius: .5rem;
@@ -254,7 +255,8 @@ body {
   border: 0px;
 }
 
-.chatSection form button:hover, .chatSection form button:focus {
+.chatSection form button:hover,
+.chatSection form button:focus {
   background-color: #ee5f3c;
   box-shadow: inset 0 1px rgba(255, 255, 255, .3);
 }
@@ -396,7 +398,8 @@ body {
   background-color: #ee5f3c;
 }
 
-.rightArrow, .leftArrow {
+.rightArrow,
+.leftArrow {
   height: 18px;
   font-size: 40px;
 }
@@ -465,7 +468,7 @@ body {
 }
 
 .changeVideoUrlInnerContainer .header {
-  background: #2196F3;
+  background: #2196f3;
   color: #fff;
   padding: 26.8px;
   border-top-left-radius: .5rem;
@@ -481,3 +484,48 @@ body {
 }
 
 /* Change Video Url Module Ends */
+
+.exitRoomBttn {
+  background: #595b5b;
+  border: 0px;
+  border-color: transparent;
+  border-top-right-radius: 20px;
+  color: white;
+  cursor: pointer;
+  font-family: cursive;
+  font-size: 25px;
+  height: 74.3px;
+  line-height: 0px;
+  outline: none;
+  position: absolute;
+  right: -1px;
+  top: -1px;
+  width: 66px;
+}
+
+.exitRoomBttn:hover {
+  background-color: #ee5f3c;
+}
+
+.videoContainer h1 {
+  -moz-border-radius: 20px 20px 0px 0px;
+  -webkit-border-radius: 20px 20px 0px 0px;
+  background-color: #3f7eb6;
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .15));
+  border: 1px solid rgba(0, 0, 0, .5);
+  border-radius: 20px 20px 0px 0px;
+  box-shadow: inset 0 1px rgba(255, 255, 255, .3);
+  color: white;
+  font-family: 'Vollkorn', serif;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 0.4vh;
+  padding: 16px;
+  position: relative;
+  text-align: center;
+}
+
+#player {
+  height: 390px;
+  width: 749px;
+}
