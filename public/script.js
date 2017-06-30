@@ -11,13 +11,13 @@ function onYouTubeIframeAPIReady() {
     width: "749",
     // playerVars: { 'autoplay': 0, },
     playerVars: {
-      rel: 0
+      rel: 0,
     },
     videoId: "",
     events: {
       // 'onReady': onPlayerReady,
-      onStateChange: onPlayerStateChange
-    }
+      onStateChange: onPlayerStateChange,
+    },
   });
 }
 
@@ -39,12 +39,12 @@ socket.on("rooms count", function(data) {
     if (!data[key].sockets.hasOwnProperty(key)) {
       // console.log(key);
       if (key !== "global") {
-        containgRooms += `<li onclick="joiningNewRoom('${key}');">${key}</li>'`;
+        containgRooms += `<li onclick="joiningNewRoom('${key}');">${key}</li>`;
       }
     }
   }
   roomsOpen.innerHTML = containgRooms;
-  $(".showRoomsContainer ul").html($("ul").find("li").get().reverse());
+  $(".showRoomsContainer ul").find("li").get().reverse();
   $(".showRoomsContainer").append(
     '<div class="addRoomBttn"  onclick="showAddRoomModule()">+</div>'
   );
@@ -128,7 +128,7 @@ $("#chatContainer form").submit(function() {
   let chatMessage = $("#m").val();
   socket.emit("chat message", {
     msg: chatMessage,
-    room: room
+    room: room,
   });
   $("#m").val("");
   return false;
@@ -144,14 +144,14 @@ socket.on("new message", function(data) {
       "</li>"
   );
   $("#messages").animate({
-    scrollTop: $("#messages").get(0).scrollHeight
+    scrollTop: $("#messages").get(0).scrollHeight,
   });
 });
 
 $("#setNameContainer form").submit(function() {
   socket.emit("user joined", {
     name: $("#setNameBox").val(),
-    room: room
+    room: room,
   });
   $("#setNameBox").val("");
   $("#setNameContainer").hide();
@@ -169,7 +169,7 @@ socket.on("got new user", function(data) {
       "</li>"
   );
   $("#messages").animate({
-    scrollTop: $("#messages").get(0).scrollHeight
+    scrollTop: $("#messages").get(0).scrollHeight,
   });
 });
 
@@ -184,7 +184,7 @@ socket.on("user got disconnected", function(data) {
         "</li>"
     );
     $("#messages").animate({
-      scrollTop: $("#messages").get(0).scrollHeight
+      scrollTop: $("#messages").get(0).scrollHeight,
     });
   }
 });
@@ -204,7 +204,7 @@ function loadVideoByUrl(containerName) {
     .trim();
   socket.emit("sending url to server", {
     url: url,
-    room: room
+    room: room,
   });
   $(`.${containerName} #url`).val("");
   return false;
@@ -255,7 +255,7 @@ function onPlayerStateChange(event) {
       if (currentTime != undefined) {
         socket.emit("new time send to server", {
           time: currentTime,
-          room: room
+          room: room,
         });
       }
     } else if (event.data == 1) {
