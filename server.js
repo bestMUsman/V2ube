@@ -36,12 +36,13 @@ io.on("connection", function(socket) {
   socket.on("disconnect", function() {
     console.log("a user disconnected");
     console.log("socket.userRoom: ", socket.userRoom);
-
+    
     deletePeopleInRoomInRoomsInfo(socket.userRoom);
     deleteRoomInRoomsInfoIfEmpty(socket.userRoom);
     io.sockets.in(socket.userRoom).emit("user got disconnected", {
       name: socket.username,
     });
+    sendNewRoomData();
   });
 
   socket.on("user joined", function(data) {
@@ -103,6 +104,13 @@ io.on("connection", function(socket) {
   }
   /* Manage Rooms Function Ends */
 
+  function sendNewRoomData() {
+    io.sockets.emit("rooms count", {
+      namesOfRooms: io.sockets.adapter.rooms,
+      peopleCountInRoom: roomsInfo,
+    });
+  }
+
   socket.on("room", function(room) {
     console.log("this is the socketid of this user: socket.id", socket.id);
 
@@ -122,7 +130,7 @@ io.on("connection", function(socket) {
     }
     socket.join(room); // Joining the new room
     console.log("Listing All Rooms: " + io.sockets.adapter.rooms);
-    io.sockets.emit("rooms count", io.sockets.adapter.rooms);
+    sendNewRoomData();
 
     console.log("socket.userRoom: ", socket.userRoom);
     console.log("roomsInfo[socket.userRoom]: ", roomsInfo[socket.userRoom]);
