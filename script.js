@@ -15,7 +15,7 @@ function onYouTubeIframeAPIReady() {
     },
     videoId: "",
     events: {
-      // 'onReady': onPlayerReady,
+      onReady: onPlayerReady,
       onStateChange: onPlayerStateChange,
     },
   });
@@ -215,9 +215,30 @@ function loadVideoByUrl(containerName) {
 var firsTimeLoaded = true;
 let oldOldState = "";
 let oldState = "";
+let playerIsReady = false;
+let waitingForPlayerIsReady = false;
+let videoUrl = "";
+let toSingleClientOnly = false;
+socket.on("sending url to everyone or to client", function(data) {
+  console.log("the new video url is: ", data.url);
+  // console.log("this is player: ", player);
+  toSingleClientOnly = data.toSingleClientOnly;
+  if (playerIsReady && !toSingleClientOnly) {
+    console.log("player was alraedy ready");
 
-socket.on("sending url to everyone", function(data) {
-  player.loadVideoById(data.url);
+    player.loadVideoById(data.url);
+  } else if (playerIsReady && toSingleClientOnly) {
+    firsTimeLoaded = false;
+    player.loadVideoById(data.url);
+    socket.emit("give me room video state and time");
+  } else {
+    console.log("player was NOT  ready");
+
+    // this means a user came directly by room url
+    videoUrl = data.url;
+    waitingForPlayerIsReady = true;
+    firsTimeLoaded = false;
+  }
 });
 
 socket.on("playing video for everyone", function() {
@@ -235,12 +256,35 @@ socket.on("send this time to everyone", function(time) {
   }
 });
 
-// function onPlayerReady(event) {
-//   console.log('this is workin inside onplayerready');
-// }
+socket.on(
+  "give your room video state and time to everyone in room except sender",
+  function() {
+    sendNewTimeToServer();
+  }
+);
+
+function onPlayerReady(event) {
+  console.log("this is workin inside onplayerready");
+  playerIsReady = true;
+  // This is when someone comes on a website directly with the room url, so it waits for the player to get ready
+  if (waitingForPlayerIsReady) {
+    player.loadVideoById(videoUrl);
+    if (toSingleClientOnly) {
+      socket.emit("give me room video state and time");
+    }
+  }
+}
+
+function sendNewTimeToServer() {
+  let currentTime = player.getCurrentTime();
+  socket.emit("new time send to server", {
+    time: currentTime,
+    room: room,
+  });
+}
 
 function onPlayerStateChange(event) {
-  // console.log("State Change => ", event.data);
+  console.log("State Change => ", event.data);
   if (firsTimeLoaded == false) {
     // To change the time, when the video is paused and the the time is being changed so the other method doesn't work -- Pause and Play Method
     if (
@@ -249,11 +293,9 @@ function onPlayerStateChange(event) {
     ) {
       // console.log("sending time using pause and play method");
       let currentTime = player.getCurrentTime();
+
       if (currentTime != undefined) {
-        socket.emit("new time send to server", {
-          time: currentTime,
-          room: room,
-        });
+        sendNewTimeToServer();
       }
     } else if (event.data == 1) {
       // To change the video time for everyone -- using buffer method
@@ -280,6 +322,8 @@ function onPlayerStateChange(event) {
 
   // To Stop Video In the Beggining
   if (event.data == 1 && firsTimeLoaded == true) {
+    console.log("STOPPNIG VIDEO ");
+
     player.stopVideo();
     firsTimeLoaded = false;
   }
