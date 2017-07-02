@@ -76,8 +76,11 @@ io.on("connection", function(socket) {
 
   function addPeopleInRoomInRoomsInfo(roomName) {
     console.log("Line 72: ", roomName);
-    if (roomsInfo[roomName].people == undefined) {
+    // if (roomsInfo[roomName].people == undefined) {
+    if (roomsInfo[roomName].hasOwnProperty("people") === false) {
+      console.log('RESETING ROOM PEOPLE');
       roomsInfo[roomName].people = 0;
+      
     }
     roomsInfo[roomName].people += 1;
   }
@@ -120,6 +123,7 @@ io.on("connection", function(socket) {
       addRoomInRoomsInfo(room);
     }
     addPeopleInRoomInRoomsInfo(room);
+      console.log("LINE 123: ", roomsInfo);
 
     if (Object.keys(io.sockets.adapter.sids[socket.id]).length >= 2) {
       let OldRoom = socket.rooms[Object.keys(socket.rooms)[1]];
