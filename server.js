@@ -31,12 +31,16 @@ const io = socketIO(server);
 
 io.on("connection", function(socket) {
   /* User Connection/Disconnection Starts */
+  console.log(
+    "                                                                                                                                                                                                                                                      "
+  );
+
   console.log("a user connected");
 
   socket.on("disconnect", function() {
     console.log("a user disconnected");
     console.log("socket.userRoom: ", socket.userRoom);
-    
+
     deletePeopleInRoomInRoomsInfo(socket.userRoom);
     deleteRoomInRoomsInfoIfEmpty(socket.userRoom);
     io.sockets.in(socket.userRoom).emit("user got disconnected", {
@@ -62,33 +66,47 @@ io.on("connection", function(socket) {
   function isThisRoomInRoomsInfo(roomName) {
     if (roomsInfo.hasOwnProperty(roomName) === false) {
       // console.log(roomsInfo[key])
-      console.log(false);
+      // console.log(false);
       return false;
     }
   }
 
   function addRoomInRoomsInfo(roomName) {
-    // if (roomName !== "global") {
-    roomsInfo[roomName] = {};
-    console.log("Now adding room to RoomsInfo");
-    // }
+    if (roomsInfo[roomName] === undefined) {
+      console.log("Adding room to RoomsInfo: ", roomName);
+      roomsInfo[roomName] = {};
+    } else {
+      console.log("Didn't add Room b/c it was already there: ", roomName);
+    }
   }
 
   function addPeopleInRoomInRoomsInfo(roomName) {
-    console.log("Line 72: ", roomName);
-    // if (roomsInfo[roomName].people == undefined) {
-    if (roomsInfo[roomName].hasOwnProperty("people") === false) {
-      console.log('RESETING ROOM PEOPLE');
-      roomsInfo[roomName].people = 0;
-      
+    console.log(
+      "Adding People in: ",
+      roomName,
+      ", People Contains Before Adding: ",
+      roomsInfo[roomName].people
+    );
+
+    if (isNaN(roomsInfo[roomName].people)) {
+      console.log(
+        "The Room.people was not already defined, that is why it came here"
+      );
+
+      roomsInfo[roomName].people = +1;
+    } else {
+      roomsInfo[roomName].people += 1;
     }
-    roomsInfo[roomName].people += 1;
   }
 
   function deletePeopleInRoomInRoomsInfo(roomName) {
-    console.log("RoomsInfo: ", roomsInfo);
-    console.log("about to delete people");
     if (roomsInfo[roomName] !== undefined) {
+      console.log(
+        "Deleting People From ",
+        roomName,
+        ", People Contains Before Deleting: ",
+        roomsInfo[roomName].people
+      );
       roomsInfo[roomName].people -= 1;
     }
   }
@@ -100,7 +118,12 @@ io.on("connection", function(socket) {
   function deleteRoomInRoomsInfoIfEmpty(roomName) {
     if (roomsInfo[roomName] !== undefined) {
       if (roomsInfo[roomName].people == 0) {
-        console.log("about to delete room ", roomsInfo[roomName].people);
+        console.log(
+          "Deleting Room: ",
+          roomName,
+          " People Contains: ",
+          roomsInfo[roomName].people
+        );
         delete roomsInfo[roomName];
       }
     }
@@ -115,7 +138,7 @@ io.on("connection", function(socket) {
   }
 
   socket.on("room", function(room) {
-    console.log("this is the socketid of this user: socket.id", socket.id);
+    // console.log("this is the socketid of this user: socket.id", socket.id);
 
     socket.userRoom = room; // Setting up new room for the session of user
 
@@ -123,7 +146,7 @@ io.on("connection", function(socket) {
       addRoomInRoomsInfo(room);
     }
     addPeopleInRoomInRoomsInfo(room);
-      console.log("LINE 123: ", roomsInfo);
+    console.log("LINE 123 RoomsInfo Obj: ", roomsInfo);
 
     if (Object.keys(io.sockets.adapter.sids[socket.id]).length >= 2) {
       let OldRoom = socket.rooms[Object.keys(socket.rooms)[1]];
@@ -133,11 +156,11 @@ io.on("connection", function(socket) {
       console.log("OLD ROOM: ", OldRoom);
     }
     socket.join(room); // Joining the new room
-    console.log("Listing All Rooms: " + io.sockets.adapter.rooms);
+    // console.log("Listing All Rooms: " + io.sockets.adapter.rooms);
     sendNewRoomData();
 
-    console.log("socket.userRoom: ", socket.userRoom);
-    console.log("roomsInfo[socket.userRoom]: ", roomsInfo[socket.userRoom]);
+    // console.log("socket.userRoom: ", socket.userRoom);
+    // console.log("roomsInfo[socket.userRoom]: ", roomsInfo[socket.userRoom]);
 
     if (room !== "global") {
       console.log("roomsInfo Obj: ", roomsInfo);
@@ -213,7 +236,6 @@ io.on("connection", function(socket) {
     });
   });
   /* Chat Ends in Server */
-
   /* Youtube Section Starts in Server */
   socket.on("sending url to server", function(data) {
     // roomsInfo[socket.userRoom] = data.url;
@@ -221,6 +243,7 @@ io.on("connection", function(socket) {
       addRoomInRoomsInfo(socket.userRoom);
     }
     addUrlToRoomInRoomsInfo(socket.userRoom, data.url);
+    // check
     console.log("this is rooms Info object: ", roomsInfo);
 
     // console.log('second one ', data.url);

@@ -1,0 +1,15 @@
+// Place your settings in this file to overwrite default and user settings.
+
+{
+    "todohighlight.isEnable": true,
+    "todohighlight.keywords": [
+        {
+            "text": "check",
+            "color": "green",
+            "borderRadius":"2px",
+            "backgroundColor": "orange",
+            "overviewRulerColor": "orange",
+            "isWholeLine": true
+        }
+    ]
+}
