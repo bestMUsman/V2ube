@@ -5,10 +5,9 @@ Welcome to V-Tube!
 ===================
 
 ### What does it do?  
-An app which allows people to create different rooms where people can chat in real-time. It also allows users to enter the video url and watch videos together with synchronize functionality. It also allow users to move the pause, play, and move the video time forward or backward for everyone in the room.
+An app which allows people to create different rooms where people can chat in real-time. It also allows users to enter the video url and watch videos together with synchronize functionality. It also allow users to pause, play, and move the video time forward and backward for everyone in the room, enabling everyone in the room to experience the same video scene together.
                                             
 ### How to use it?  
-
  - Go to the website 
  - Click on Create Room Button
  - Enter the Room Name and Video Url
@@ -16,7 +15,6 @@ An app which allows people to create different rooms where people can chat in re
  - Your friends join the room then you watch video and chat together
 
 ### How does it work? 
-
  - When user vists a website, so he/she is given a default room using socket.
  - User joins a room, which creates a new property in a room object to keep the track of the room info. 
  - Room info includes: People in room, Video url of the Room, Still Open or Close, Count of People.
