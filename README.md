@@ -1,5 +1,5 @@
 
-**Live**: https://v-tube.herokuapp.com/
+**Live**: http://www.v2ube.com/
 
 Welcome to V-Tube!
 ===================
