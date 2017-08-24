@@ -1,4 +1,9 @@
 <style>
+    body {
+        margin: 0;
+        display: inline-block;
+    }
+
     .contactInnerContainer .header {
         background: #2196f3;
         color: #fff;
@@ -15,7 +20,7 @@
         margin: auto;
     }
 
-    .contact button {
+    .contact #submit {
         color: #fff;
         background-color: #0275d8;
         border-color: #0275d8;
@@ -37,7 +42,7 @@
         margin-top: 20px;
     }
 
-    .contact button:hover {
+    .contact #submit:hover {
         background-color: #025aa5;
         border-color: #01549b;
     }
@@ -70,7 +75,7 @@
     <div class="header">Contact Form</div>
     <div class="contact" id="contactContainer">
         <div class="moduleContainer">
-            <form method='post' action='mail_handler.php'>
+            <form method='post' action='http://www.muhammadusman.tk/form/mail_handler.php'>
                 <div class="contactName">
                     <label><b>Name:</b></label>
                     <input name="name" placeholder="Your Name" required />
@@ -83,7 +88,7 @@
                     <label><b>Message:</b></label>
                     <textarea rows="8" name="message" placeholder="Type Your Text Here" class="form" required=""></textarea>
                 </div>
-                <button>Submit</button>
+                <input type="submit" name="submit" value="Submit" id="submit">
             </form>
         </div>
     </div>
