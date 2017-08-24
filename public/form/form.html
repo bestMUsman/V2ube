@@ -1,0 +1,90 @@
+<style>
+    .contactInnerContainer .header {
+        background: #2196f3;
+        color: #fff;
+        padding: 26.8px;
+        border-top-left-radius: .5rem;
+        border-top-right-radius: .5rem;
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 19.3px;
+    }
+
+    .contactInnerContainer {
+        width: 319px;
+        margin: auto;
+    }
+
+    .contact button {
+        color: #fff;
+        background-color: #0275d8;
+        border-color: #0275d8;
+        display: inline-block;
+        padding: .375rem 1rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        border-radius: .25rem;
+        margin-top: 20px;
+    }
+
+    .contact button:hover {
+        background-color: #025aa5;
+        border-color: #01549b;
+    }
+
+    .contact {
+        background: #f5f5f5;
+        padding: 2rem;
+        padding-bottom: 0.5rem;
+        border-bottom-left-radius: .5rem;
+        border-bottom-right-radius: .5rem;
+    }
+
+    .contact input,
+    .contact textarea {
+        width: 100%;
+        padding: .375rem .75rem;
+    }
+
+    .contact .contactName {
+        margin-top: -1.5vh;
+    }
+
+    .contact .contactEmail,
+    .contact .contactMessage {
+        margin-top: 2vh;
+    }
+</style>
+
+<div class="contactInnerContainer">
+    <div class="header">Contact Form</div>
+    <div class="contact" id="contactContainer">
+        <div class="moduleContainer">
+            <form method='post' action='mail_handler.php'>
+                <div class="contactName">
+                    <label><b>Name:</b></label>
+                    <input name="name" placeholder="Your Name" required />
+                </div>
+                <div class="contactEmail">
+                    <label><b>Email:</b></label>
+                    <input name="email" placeholder="email@example.com" required />
+                </div>
+                <div class="contactMessage">
+                    <label><b>Message:</b></label>
+                    <textarea rows="8" name="message" placeholder="Type Your Text Here" class="form" required=""></textarea>
+                </div>
+                <button>Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

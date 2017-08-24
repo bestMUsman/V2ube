@@ -310,7 +310,7 @@ function onPlayerStateChange(event) {
     } else if (event.data == 1) {
       // To change the video time for everyone -- using buffer method
       // else if (event.data == 3 && firsTimeLoaded == false) {
-        // console.log('now it is time to get new time');
+      // console.log('now it is time to get new time');
       //   let currentTime = player.getCurrentTime();
       //   if (currentTime != undefined) {
       //     socket.emit("new time send to server", {
@@ -345,3 +345,16 @@ function onPlayerStateChange(event) {
   oldOldState = oldState;
   oldState = event.data;
 }
+
+/* Contact Section Starts */
+function showContactForm() {
+  $(".contactContainer").css("display", "flex");
+  $(".contactInnerContainer").show().addClass("animatezoom");
+}
+
+$(".contactContainer").click(function(event) {
+  if ($(event.target).is(":not(.contactContainer *)")) {
+    $(".contactContainer").hide();
+  }
+});
+/* Contact Section Starts */

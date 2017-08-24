@@ -81,7 +81,6 @@
         <form action="" id="setNameForm">
           <label class="yourName">What's Your Name</label>
           <input id="setNameBox" autocomplete="off" required autofocus />
-          <!--<button>Enter</button>-->
         </form>
       </div>
 
@@ -94,9 +93,21 @@
     </div>
     <!-- Chat Ends -->
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script src="script.js"></script>
+    <!-- Contact Section Starts -->
+    <div class="contactBttn" onclick="showContactForm()">
+      <img src="images/contact.ico" alt="">
+    </div>
+
+
+    <div class="contactContainer">
+        <iframe src="form/form.html" frameborder="0"></iframe>
+    </div>
+    <!-- Contact Section Ends -->
+
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script src="script.js"></script>
 </body>
 
 </html>
