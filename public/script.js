@@ -54,12 +54,11 @@ socket.on("rooms count", function(data) {
   let namesOfRooms = data.namesOfRooms;
   let peopleCountInRoom = data.peopleCountInRoom;
   // console.log("people counting: ", peopleCountInRoom);
-  for (var key in namesOfRooms) {
+  for (let key in namesOfRooms) {
     if (!namesOfRooms[key].sockets.hasOwnProperty(key)) {
       if (key !== "global") {
-        // debugger;
         let peopleCountForThisRoom = "";
-        for (var newKey in peopleCountInRoom) {
+        for (let newKey in peopleCountInRoom) {
           if (newKey == key) {
             peopleCountForThisRoom = peopleCountInRoom[newKey].people;
           }
@@ -99,10 +98,12 @@ function joiningNewRoom(roomName) {
   if (roomName == "global") {
     $(".youtubeSection").hide();
     $(".showRoomsContainer").show();
+    $(".contactBttn").show();
     history.pushState(null, null, "/");
   } else {
     $(".youtubeSection").show();
     $(".showRoomsContainer").hide();
+    $(".contactBttn").hide();
     history.pushState(null, null, "/Roomname=" + room);
   }
   messages.innerHTML = "";
@@ -159,6 +160,27 @@ socket.on("new message", function(data) {
       data.msg +
       "</li>"
   );
+  $("#messages").animate({
+    scrollTop: $("#messages").get(0).scrollHeight,
+  });
+});
+
+socket.on("send saved messages to single client", function(data) {
+  console.log("WORKNIGN HAHAH GOT MESSAGES");
+
+  const messages = document.querySelector("#messages");
+  data = data.data;
+
+  for (let i = 0; i < data.length; i++) {
+    let li = document.createElement("li");
+    li.innerHTML =
+      "<span class='nameTagMessage'>" +
+      data[i].name +
+      "</span>: " +
+      data[i].message;
+    messages.appendChild(li);
+  }
+
   $("#messages").animate({
     scrollTop: $("#messages").get(0).scrollHeight,
   });
@@ -222,7 +244,7 @@ function loadVideoByUrl(containerName) {
   return false;
 }
 
-var firsTimeLoaded = true;
+let firsTimeLoaded = true;
 let oldOldState = "";
 let oldState = "";
 let playerIsReady = false;
@@ -348,13 +370,15 @@ function onPlayerStateChange(event) {
 
 /* Contact Section Starts */
 function showContactForm() {
+  history.pushState(null, null, "/contact");
   $(".contactContainer").css("display", "flex");
   $(".contactInnerContainer").show().addClass("animatezoom");
 }
 
 $(".contactContainer").click(function(event) {
-  if ($(event.target).is(":not(.contactContainer *)")) {
+  if ($(event.target).is(":not(.contactContainer iframe *)")) {
     $(".contactContainer").hide();
+    history.pushState(null, null, "/");
   }
 });
 /* Contact Section Starts */

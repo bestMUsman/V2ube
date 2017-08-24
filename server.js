@@ -4,6 +4,7 @@ const path = require("path");
 console.log("going to reset the roomsInfo");
 
 let roomsInfo = {};
+let savedMessages = {};
 
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, "index.html");
@@ -42,7 +43,7 @@ io.on("connection", function(socket) {
     console.log("socket.userRoom: ", socket.userRoom);
 
     deletePeopleInRoomInRoomsInfo(socket.userRoom);
-    deleteRoomInRoomsInfoIfEmpty(socket.userRoom);
+    deleteMessagesInSavedMessagesObjIfRoomIsEmpty(socket.userRoom);
     io.sockets.in(socket.userRoom).emit("user got disconnected", {
       name: socket.username,
     });
@@ -137,6 +138,30 @@ io.on("connection", function(socket) {
     });
   }
 
+  function keepSavedMessages(room, userName, msg) {
+    if (!Array.isArray(savedMessages[room])) {
+      savedMessages[room] = [];
+    }
+    savedMessages[room].push({ name: [userName], message: msg });
+    if (savedMessages[room].length > 10) {
+      savedMessages[room].shift();
+    }
+  }
+
+  function deleteMessagesInSavedMessagesObjIfRoomIsEmpty(roomName) {
+    if (roomsInfo[roomName] == undefined && roomName !== "global") {
+      delete savedMessages[roomName];
+    }
+  }
+
+  function sendSavedMessagesToClient(socketId, roomName) {
+    if (savedMessages.hasOwnProperty(roomName)) {
+      io.sockets.to(socketId).emit("send saved messages to single client", {
+        data: savedMessages[roomName],
+      });
+    }
+  }
+
   socket.on("room", function(room) {
     // console.log("this is the socketid of this user: socket.id", socket.id);
 
@@ -152,13 +177,14 @@ io.on("connection", function(socket) {
       let OldRoom = socket.rooms[Object.keys(socket.rooms)[1]];
       deletePeopleInRoomInRoomsInfo(OldRoom);
       deleteRoomInRoomsInfoIfEmpty(OldRoom);
+      deleteMessagesInSavedMessagesObjIfRoomIsEmpty(OldRoom);
       socket.leave(OldRoom); // Leaving the old room
       console.log("OLD ROOM: ", OldRoom);
     }
     socket.join(room); // Joining the new room
     // console.log("Listing All Rooms: " + io.sockets.adapter.rooms);
+    sendSavedMessagesToClient(socket.id, room);
     sendNewRoomData();
-
     // console.log("socket.userRoom: ", socket.userRoom);
     // console.log("roomsInfo[socket.userRoom]: ", roomsInfo[socket.userRoom]);
 
@@ -176,17 +202,10 @@ io.on("connection", function(socket) {
         console.log("it should send url to the specifi person now");
         let videoUrl = roomsInfo[socket.userRoom].url;
 
-        // socket.to(socket.id).emit("sending url to everyone or to client", {
-        //   url: videoUrl,
-        // });
         socket.emit("sending url to everyone or to client", {
           url: videoUrl,
           toSingleClientOnly: true,
         });
-
-        // io.sockets.in(socket.userRoom).emit("sending url to everyone or to client", {
-        //   url: videoUrl,
-        // });
       }
     } else {
       socket.emit("sending url to everyone or to client", {
@@ -194,16 +213,6 @@ io.on("connection", function(socket) {
         toSingleClientOnly: true,
       });
     }
-    // if (room !== "global") {
-    //   let lengthOfRoom = io.sockets.adapter.rooms[socket.userRoom].length;
-    //   if (lengthOfRoom >= 1) {
-    //     console.log(
-    //       "there are these many people: ",
-    //       io.sockets.adapter.rooms[socket.userRoom].length
-    //     );
-    //     // roomsInfo[socket.userRoom] = data.url;
-    //   }
-    // }
   });
 
   /* Room Ends */
@@ -229,6 +238,10 @@ io.on("connection", function(socket) {
         ", User: " +
         socket.username
     );
+    keepSavedMessages([socket.userRoom], [socket.username], data.msg);
+    // console.log("savedMessages: ", savedMessages);
+
+    // savedMessages[socket.userRoom].push("sdfdsfds");
     console.log(data.msg);
     io.sockets.in(socket.userRoom).emit("new message", {
       msg: data.msg,
@@ -243,7 +256,6 @@ io.on("connection", function(socket) {
       addRoomInRoomsInfo(socket.userRoom);
     }
     addUrlToRoomInRoomsInfo(socket.userRoom, data.url);
-    // check
     console.log("this is rooms Info object: ", roomsInfo);
 
     // console.log('second one ', data.url);
