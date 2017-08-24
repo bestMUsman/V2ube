@@ -33,7 +33,6 @@ socket.on("connect", function() {
 function getUrl() {
   let url = window.location.pathname;
   url = url.split("/Roomname=").pop().trim();
-
   if (url !== "/") {
     room = url;
   } else {
@@ -53,7 +52,6 @@ socket.on("rooms count", function(data) {
   let containgRoomsAsString = "";
   let namesOfRooms = data.namesOfRooms;
   let peopleCountInRoom = data.peopleCountInRoom;
-  // console.log("people counting: ", peopleCountInRoom);
   for (let key in namesOfRooms) {
     if (!namesOfRooms[key].sockets.hasOwnProperty(key)) {
       if (key !== "global") {
@@ -166,11 +164,8 @@ socket.on("new message", function(data) {
 });
 
 socket.on("send saved messages to single client", function(data) {
-  console.log("WORKNIGN HAHAH GOT MESSAGES");
-
   const messages = document.querySelector("#messages");
   data = data.data;
-
   for (let i = 0; i < data.length; i++) {
     let li = document.createElement("li");
     li.innerHTML =
@@ -252,20 +247,14 @@ let waitingForPlayerIsReady = false;
 let videoUrl = "";
 let toSingleClientOnly = false;
 socket.on("sending url to everyone or to client", function(data) {
-  // console.log("the new video url is: ", data.url);
-  // console.log("this is player: ", player);
   toSingleClientOnly = data.toSingleClientOnly;
   if (playerIsReady && !toSingleClientOnly) {
-    // console.log("player was alraedy ready");
-
     player.loadVideoById(data.url);
   } else if (playerIsReady && toSingleClientOnly) {
     firsTimeLoaded = false;
     player.loadVideoById(data.url);
     socket.emit("give me room video state and time");
   } else {
-    // console.log("player was NOT  ready");
-
     // this means a user came directly by room url
     videoUrl = data.url;
     waitingForPlayerIsReady = true;
@@ -296,7 +285,6 @@ socket.on(
 );
 
 function onPlayerReady(event) {
-  // console.log("this is workin inside onplayerready");
   playerIsReady = true;
   // This is when someone comes on a website directly with the room url, so it waits for the player to get ready
   if (waitingForPlayerIsReady) {
@@ -316,54 +304,30 @@ function sendNewTimeToServer() {
 }
 
 function onPlayerStateChange(event) {
-  // console.log("State Change => ", event.data);
   if (firsTimeLoaded == false) {
     // To change the time, when the video is paused and the the time is being changed so the other method doesn't work -- Pause and Play Method
     if (
       (oldState == 2 && event.data == 1) ||
       (oldOldState == 2 && event.data == 1)
     ) {
-      // console.log("sending time using pause and play method");
       let currentTime = player.getCurrentTime();
-
       if (currentTime != undefined) {
         sendNewTimeToServer();
       }
     } else if (event.data == 1) {
-      // To change the video time for everyone -- using buffer method
-      // else if (event.data == 3 && firsTimeLoaded == false) {
-      // console.log('now it is time to get new time');
-      //   let currentTime = player.getCurrentTime();
-      //   if (currentTime != undefined) {
-      //     socket.emit("new time send to server", {
-      //       time: currentTime,
-      //       room: room,
-      //     });
-      //   }
-      // }
-
       // To play the video for everyone
       socket.emit("play video now to server", room);
     }
-
     // To pause the video for everyone
     if (event.data == 2) {
       socket.emit("pause video now to server", room);
     }
   }
-
   // To Stop Video In the Beggining
   if (event.data == 1 && firsTimeLoaded == true) {
-    // console.log("STOPPNIG VIDEO ");
-
     player.stopVideo();
     firsTimeLoaded = false;
   }
-
-  // if (event.data == YT.PlayerState.PLAYING && !done) {
-  //   setTimeout(stopVideo, 6000);
-  //   done = true;
-  // }
   oldOldState = oldState;
   oldState = event.data;
 }
