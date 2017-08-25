@@ -20,6 +20,9 @@ const server = express()
   .get("/", function(req, res) {
     res.sendFile(INDEX);
   })
+  .get("/contact", function(req, res) {
+    res.sendFile(INDEX);
+  })
   .get("/Roomname=:id", function(req, res) {
     res.sendFile(INDEX);
   })

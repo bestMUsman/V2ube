@@ -98,7 +98,14 @@ function joiningNewRoom(roomName) {
     $(".showRoomsContainer").show();
     $(".contactBttn").show();
     history.pushState(null, null, "/");
-  } else {
+  } else if (roomName === '/contact') {
+    $(".youtubeSection").hide();
+    $(".showRoomsContainer").show();
+    $(".contactBttn").show();
+    showContactForm();
+    roomName = "global";
+  } 
+  else {
     $(".youtubeSection").show();
     $(".showRoomsContainer").hide();
     $(".contactBttn").hide();
