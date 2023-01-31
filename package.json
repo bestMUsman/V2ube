@@ -4,6 +4,7 @@
   "description": "Chat App",
   "main": "server.js",
   "scripts": {
+    "deploy-to-github-pages": "git add public && git commit -m 'Initial public subtree commit' && git subtree push --prefix public origin gh-pages",
     "start": "node server.js",
     "inspect": "nodemon --inspect server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
