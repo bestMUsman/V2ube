@@ -37,9 +37,10 @@ function getUrl() {
 
     let urlParams = new URLSearchParams(window.location.search);
     let roomName = urlParams.get('RoomName');
+    let contact = urlParams.get('contact');
 
     console.log(`roomName =>`, roomName);
-    room = roomName || "global";
+    room = contact || roomName || "global";
 
 
     joiningNewRoom(room);
@@ -82,10 +83,13 @@ socket.on("rooms count", function (data) {
 
 // When a user submits 'creates new room' form
 $(".addingRoomContainer form").submit(function () {
-    joiningNewRoom($(".addingRoomContainer #name").val());
-    loadVideoByUrl("addingRoomContainer");
-    $(".addingRoomContainer #name").val("");
+    if (loadVideoByUrl("addingRoomContainer")) {
+
+        joiningNewRoom($(".addingRoomContainer #name").val());
+        $(".addingRoomContainer #name").val("");
+    }
     return false;
+
 });
 
 // When a user changes the video Url
@@ -101,15 +105,16 @@ function joiningNewRoom(roomName) {
         $(".youtubeSection").hide();
         $(".showRoomsContainer").show();
         $(".contactBttn").show();
-        history.pushState(null, null, "/");
-    } else if (roomName === '/contact') {
+        history.pushState(null, null, "?");
+
+    } else if (roomName === 'contact') {
         $(".youtubeSection").hide();
         $(".showRoomsContainer").show();
         $(".contactBttn").show();
         showContactForm();
         roomName = "global";
-    }
-    else {
+
+    } else {
         $(".youtubeSection").show();
         $(".showRoomsContainer").hide();
         $(".contactBttn").hide();
@@ -236,18 +241,37 @@ socket.on("user got disconnected", function (data) {
 /* Youtube Section Starts in Script  */
 // This sends the url to server when a user submit the form
 function loadVideoByUrl(containerName) {
-    $(`.${containerName}`).hide();
 
-    let ytURL = new URL($(`.${containerName} #url`).val());
-    let ytSearchParams = new URLSearchParams(ytURL?.search);
-    let url = ytSearchParams?.get('v');
 
-    socket.emit("sending url to server", {
-        url: url,
-        room: room,
-    });
-    $(`.${containerName} #url`).val("");
-    return false;
+    try {
+
+
+        let ytURL = new URL($(`.${containerName} #url`).val());
+        let ytSearchParams = new URLSearchParams(ytURL?.search);
+        let url = ytSearchParams?.get('v');
+        if (!url) {
+        alert('Not a valid youtube URL');
+
+            return false;
+
+        }
+
+        $(`.${containerName}`).hide();
+
+
+        socket.emit("sending url to server", {
+            url: url,
+            room: room,
+        });
+        $(`.${containerName} #url`).val("");
+
+        return true;
+    } catch (error) {
+        alert('Not a valid youtube URL');
+        return;
+        console.log(`error`, error);
+    }
+
 }
 
 let firsTimeLoaded = true;
@@ -345,7 +369,7 @@ function onPlayerStateChange(event) {
 
 /* Contact Section Starts */
 function showContactForm() {
-    history.pushState(null, null, "/contact");
+    history.pushState(null, null, "?contact=contact");
     $(".contactContainer").css("display", "flex");
     $(".contactInnerContainer").show().addClass("animatezoom");
 }
