@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>V2ube</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+  <div class="whole">
+    <!-- Show Rooms Start -->
+    <div class="showRoomsContainer">
+      <h1>Rooms</h1>
+      <ul id="roomsOpen">
+        <div class="loadingDiv">Please wait -- Loading...</div>
+      </ul>
+    </div>
+    <!-- Show Rooms Ends -->
+
+    <!-- Adding Room Module Starts -->
+    <div class="addingRoomContainer">
+      <div class="addingRoomInnerContainer">
+        <div class="header">Create A Room</div>
+        <div class="addingRoom" id="roomContainer">
+          <div class="moduleContainer">
+            <form action="">
+              <div class="roomName">
+                <label><b>Room Name</b></label>
+                <input id="name" autocomplete="off" placeholder="My Room" required />
+              </div>
+              <div class="videoUrl">
+                <label><b>Video Url</b></label>
+                <input id="url" autocomplete="off" placeholder="Example: https://www.youtube.com/watch?v=ra9ySAkuzZI" required />
+              </div>
+              <button>Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Adding Room Module Ends -->
+
+    <!-- Change Video Url Module Starts -->
+    <div class="changeVideoUrlContainer">
+      <div class="changeVideoUrlInnerContainer">
+        <div class="header">Change Video Url</div>
+        <div class="changeVideoUrl" id="roomContainer">
+          <div class="moduleContainer">
+            <form action="">
+              <div class="videoUrl">
+                <label><b>Video Url</b></label>
+                <input id="url" autocomplete="off" placeholder="Example: https://www.youtube.com/watch?v=ra9ySAkuzZI" required />
+              </div>
+              <button>Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Change Video Url Module Ends -->
+
+    <!-- Youtube Section Starts -->
+    <div class="youtubeSection">
+      <div class="videoContainer">
+        <h1>
+          <div class="switchUrlArrows" onclick="showChangeVideoUrlModule()">
+            <div class="leftArrow">&#8592;</div>
+            <div class="rightArrow">&#8594;</div>
+          </div>
+          Video
+          <button onclick="joiningNewRoom('global')" class="exitRoomBttn">X</button>
+        </h1>
+        <div id="player"></div>
+      </div>
+    </div>
+    <!--Youtube Ends-->
+
+    <!-- Chat Section Starts -->
+    <div class="chatSection">
+      <h1>Chat</h1>
+      <div id="setNameContainer">
+        <form action="" id="setNameForm">
+          <label class="yourName">What's Your Name</label>
+          <input id="setNameBox" autocomplete="off" required autofocus />
+        </form>
+      </div>
+
+      <div id="chatContainer">
+        <ul id="messages"></ul>
+        <form action="" id="messageForm">
+          <input id="m" autocomplete="off" required /><button>Send</button>
+        </form>
+      </div>
+    </div>
+    <!-- Chat Ends -->
+
+    <!-- Contact Section Starts -->
+    <div class="contactBttn" onclick="showContactForm()">
+      <img src="images/contact.ico" alt="">
+    </div>
+
+
+    <div class="contactContainer">
+      <div class="closeBttn">X</div>
+      <iframe src="form/form.html" frameborder="0"></iframe>
+    </div>
+    <!-- Contact Section Ends -->
+
+  </div>
+  <script src="socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
