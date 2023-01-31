@@ -32,13 +32,16 @@ socket.on("connect", function () {
 });
 
 function getUrl() {
-    let url = window.location.pathname;
-    url = url.split("/Roomname=").pop().trim();
-    if (url !== "/") {
-        room = url;
-    } else {
-        room = "global";
-    }
+    // let url = window.location.pathname;
+    // url = url.split("/Roomname=").pop().trim();
+
+    let urlParams = new URLSearchParams(window.location.search);
+    let roomName = urlParams.get('RoomName');
+
+    console.log(`roomName =>`, roomName);
+    room = roomName || "global";
+
+
     joiningNewRoom(room);
 }
 
@@ -110,7 +113,7 @@ function joiningNewRoom(roomName) {
         $(".youtubeSection").show();
         $(".showRoomsContainer").hide();
         $(".contactBttn").hide();
-        history.pushState(null, null, "/Roomname=" + room);
+        history.pushState(null, null, "?RoomName=" + room);
     }
     messages.innerHTML = "";
     socket.emit("room", roomName);
@@ -234,11 +237,11 @@ socket.on("user got disconnected", function (data) {
 // This sends the url to server when a user submit the form
 function loadVideoByUrl(containerName) {
     $(`.${containerName}`).hide();
-    let url = $(`.${containerName} #url`)
-        .val()
-        .split("https://www.youtube.com/watch?v=")
-        .pop()
-        .trim();
+
+    let ytURL = new URL($(`.${containerName} #url`).val());
+    let ytSearchParams = new URLSearchParams(ytURL?.search);
+    let url = ytSearchParams?.get('v');
+
     socket.emit("sending url to server", {
         url: url,
         room: room,
