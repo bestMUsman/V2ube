@@ -3,7 +3,7 @@
 
 <head>
   <title>V2ube</title>
-  <link rel="stylesheet" type="text/css" href="stylemin.css" />
+  <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
 <body>
@@ -12,6 +12,7 @@
     <div class="showRoomsContainer">
       <h1>Rooms</h1>
       <ul id="roomsOpen">
+        <div class="loadingDiv">Please wait -- Loading...</div>
       </ul>
     </div>
     <!-- Show Rooms Ends -->
@@ -106,7 +107,7 @@
     <!-- Contact Section Ends -->
 
   </div>
-  <script src="/socket.io/socket.io.js"></script>
+  <script src="socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
   <script src="script.js"></script>
 </body>
