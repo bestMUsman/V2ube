@@ -27,6 +27,7 @@ var socket = io('https://v2ube.onrender.com/');
 // When user comes to website so user joins the room by default
 let room = "global";
 socket.on("connect", function () {
+    console.log(`connectconnectconnect`);
     document.querySelector('.loadingDiv')?.remove();
     getUrl();
 });
@@ -53,6 +54,7 @@ window.onpopstate = function (event) {
 // Counting Rooms
 let roomsOpen = document.getElementById("roomsOpen");
 socket.on("rooms count", function (data) {
+    console.log(`rooms count`);
     let containgRooms = [];
     let containgRoomsAsString = "";
     let namesOfRooms = data.namesOfRooms;
@@ -83,17 +85,28 @@ socket.on("rooms count", function (data) {
 
 // When a user submits 'creates new room' form
 $(".addingRoomContainer form").submit(function () {
-    if (loadVideoByUrl("addingRoomContainer")) {
+    try {
+        
 
+        console.log("$(`.addingRoomContainer #url`).val()", $(`.addingRoomContainer #url`).val());
+        if (!isValidYtURL($(`.addingRoomContainer #url`).val())) return false;
+        
         joiningNewRoom($(".addingRoomContainer #name").val());
+        loadVideoByUrl("addingRoomContainer")
+        
         $(".addingRoomContainer #name").val("");
+        
+        return false;
+        
+    } catch (error) {
+        console.log(`err`, error);
+        return false;
     }
-    return false;
-
 });
 
 // When a user changes the video Url
 $(".changeVideoUrlContainer form").submit(function () {
+    if (!isValidYtURL($(`.changeVideoUrlContainer #url`).val())) return false;
     loadVideoByUrl("changeVideoUrlContainer");
     return false;
 });
@@ -121,6 +134,7 @@ function joiningNewRoom(roomName) {
         history.pushState(null, null, "?RoomName=" + room);
     }
     messages.innerHTML = "";
+    console.log(`roomNameroomNameroomNameroomName`, roomName);
     socket.emit("room", roomName);
 }
 /* Room Ends */
@@ -238,6 +252,27 @@ socket.on("user got disconnected", function (data) {
 });
 /* Chat Section Ends in Script */
 
+function isValidYtURL(str) {
+    try {
+
+        let ytURL = str;
+        let ytSearchParams = new URLSearchParams(new URL(ytURL)?.search);
+        let url = ytSearchParams?.get('v');
+        if (!url) {
+            console.log(`260`, url);
+            alert('Not a valid youtube URL');
+
+            return false;
+
+        }
+
+        return true;
+    } catch (error) {
+        console.log(`268`, error);
+        alert('Not a valid youtube URL');
+        return false;
+    }
+}
 /* Youtube Section Starts in Script  */
 // This sends the url to server when a user submit the form
 function loadVideoByUrl(containerName) {
@@ -249,16 +284,12 @@ function loadVideoByUrl(containerName) {
         let ytURL = new URL($(`.${containerName} #url`).val());
         let ytSearchParams = new URLSearchParams(ytURL?.search);
         let url = ytSearchParams?.get('v');
-        if (!url) {
-        alert('Not a valid youtube URL');
 
-            return false;
-
-        }
 
         $(`.${containerName}`).hide();
 
 
+        console.log(`sending url to server`, url);
         socket.emit("sending url to server", {
             url: url,
             room: room,
@@ -267,6 +298,7 @@ function loadVideoByUrl(containerName) {
 
         return true;
     } catch (error) {
+        console.log(`297`, error);
         alert('Not a valid youtube URL');
         return;
         console.log(`error`, error);
@@ -282,6 +314,7 @@ let waitingForPlayerIsReady = false;
 let videoUrl = "";
 let toSingleClientOnly = false;
 socket.on("sending url to everyone or to client", function (data) {
+    console.log(`sending url to everyone or to client`, data);
     toSingleClientOnly = data.toSingleClientOnly;
     if (playerIsReady && !toSingleClientOnly) {
         player.loadVideoById(data.url);
