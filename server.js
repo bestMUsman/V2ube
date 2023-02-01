@@ -166,6 +166,8 @@ io.on("connection", function(socket) {
   }
 
   socket.on("room", function(room) {
+
+    console.log(`this is room=>>`, room);
     // console.log("this is the socketid of this user: socket.id", socket.id);
 
     socket.userRoom = room; // Setting up new room for the session of user
@@ -254,6 +256,7 @@ io.on("connection", function(socket) {
   /* Chat Ends in Server */
   /* Youtube Section Starts in Server */
   socket.on("sending url to server", function(data) {
+    console.log(`server: sending url to server`, data);
     // roomsInfo[socket.userRoom] = data.url;
     if (!isThisRoomInRoomsInfo(socket.userRoom)) {
       addRoomInRoomsInfo(socket.userRoom);
