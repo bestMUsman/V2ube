@@ -33,4 +33,4 @@ An app which allows people to create different rooms where people can chat in re
  - PHP
 
 
-![alt text](https://github.com/musmanraodev/V2ube/blob/master/vtube.png?raw=true)
+![alt text](https://github.com/bestmusman/V2ube/blob/master/vtube.png?raw=true)
